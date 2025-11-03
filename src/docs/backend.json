@@ -1,0 +1,315 @@
+
+{
+  "entities": {
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user account within the SeaMed Inventory application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user."
+        },
+        "username": {
+          "type": "string",
+          "description": "The user's username for logging in."
+        },
+        "role": {
+          "type": "string",
+          "description": "The role of the user (e.g., admin, user, vessel)."
+        },
+        "vesselId": {
+          "type": "string",
+          "description": "Reference to Vessel. The vessel assigned to the user. (Relationship: User 1:1 Vessel)"
+        }
+      },
+      "required": [
+        "id",
+        "username",
+        "role"
+      ]
+    },
+    "Vessel": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Vessel",
+      "type": "object",
+      "description": "Represents a vessel in the SeaMed Inventory application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the vessel."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the vessel."
+        },
+        "flag": {
+          "type": "string",
+          "description": "The flag of the vessel."
+        },
+        "crewNumber": {
+          "type": "number",
+          "description": "The number of crew members on the vessel."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "flag",
+        "crewNumber"
+      ]
+    },
+    "MedicalLog": {
+      "title": "Medical Log",
+      "type": "object",
+      "description": "Represents a medical log entry for a vessel.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the medical log entry."
+        },
+        "shipId": {
+          "type": "string",
+          "description": "The ID of the vessel this log entry belongs to."
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date and time of the medical event."
+        },
+        "crewMemberName": {
+          "type": "string",
+          "description": "Name of the crew member involved."
+        },
+        "rank": {
+          "type": "string",
+          "description": "Rank of the crew member."
+        },
+        "caseDescription": {
+          "type": "string",
+          "description": "Description of the illness or injury."
+        },
+        "medicineUsedId": {
+          "type": "string",
+          "description": "ID of the inventory item (medicine) used."
+        },
+        "batchUsedId": {
+            "type": "string",
+            "description": "ID of the specific batch used."
+        },
+        "quantityUsed": {
+            "type": "number",
+            "description": "Quantity of the medicine used from the batch."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Additional notes about the event."
+        },
+        "photoUrl": {
+          "type": "string",
+          "description": "URL of an image associated with the medical log entry."
+        }
+      },
+      "required": [
+        "id",
+        "shipId",
+        "date",
+        "crewMemberName",
+        "rank",
+        "caseDescription",
+        "medicineUsedId",
+        "batchUsedId",
+        "quantityUsed"
+      ]
+    },
+     "NonMedicalConsumptionLog": {
+      "title": "Non-Medical Consumption Log",
+      "description": "Records medicine consumption for non-medical reasons like damage or expiry.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique log entry ID." },
+        "shipId": { "type": "string", "description": "The ID of the vessel." },
+        "date": { "type": "string", "format": "date-time", "description": "The date of consumption." },
+        "medicineId": { "type": "string", "description": "ID of the inventory item (medicine) consumed." },
+        "batchId": { "type": "string", "description": "ID of the specific batch consumed." },
+        "quantity": { "type": "number", "description": "Quantity of the medicine consumed." },
+        "reason": { "type": "string", "enum": ["Damaged", "Expired", "Lost", "Other"], "description": "Reason for consumption." },
+        "notes": { "type": "string", "description": "Additional notes." }
+      },
+      "required": ["id", "shipId", "date", "medicineId", "batchId", "quantity", "reason"]
+    },
+    "SuppliedItem": {
+        "title": "Supplied Item",
+        "description": "Represents a single item within a supply log.",
+        "type": "object",
+        "properties": {
+            "id": { "type": "string", "description": "Unique item ID." },
+            "supplyLogId": { "type": "string", "description": "The ID of the parent supply log." },
+            "medicineId": { "type": "string", "description": "The ID of the master medicine record." },
+            "manufacturerName": { "type": "string", "description": "The trade name from the manufacturer." },
+            "batchNumber": { "type": "string", "description": "The batch number of the supplied item." },
+            "expiryDate": { "type": "string", "format": "date-time", "description": "The expiry date of the supplied item." },
+            "quantity": { "type": "number", "description": "The quantity of the item supplied." }
+        },
+        "required": ["id", "supplyLogId", "medicineId", "quantity"]
+    },
+    "SupplyLog": {
+        "title": "Supply Log",
+        "description": "Records a medicine supply shipment for a vessel.",
+        "type": "object",
+        "properties": {
+            "id": { "type": "string", "description": "Unique log entry ID." },
+            "shipId": { "type": "string", "description": "The ID of the vessel." },
+            "date": { "type": "string", "format": "date-time", "description": "The date the supply was arranged." },
+            "portOfSupply": { "type": "string", "description": "The port where the supply will be delivered." },
+            "supplierName": { "type": "string", "description": "The name of the company supplying the medicine." },
+            "trackingNumber": { "type": "string", "description": "The tracking number for the shipment." },
+            "status": { "type": "string", "enum": ["Pending", "Shipped", "Delivered", "Cancelled"], "description": "The current status of the supply." },
+            "notes": { "type": "string", "description": "Additional notes about the supply." },
+            "orderListUrl": { "type": "string", "description": "URL of the attached order list file." },
+            "orderListFilename": { "type": "string", "description": "Filename of the attached order list." },
+            "items": {
+                "type": "array",
+                "description": "A list of medicines included in this supply.",
+                "items": { "$ref": "#/backend/entities/SuppliedItem" }
+            }
+        },
+        "required": ["id", "shipId", "date", "portOfSupply", "supplierName", "status", "items"]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores user profiles. Includes denormalized 'vesselId' for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/vessels/{vesselId}",
+        "definition": {
+          "entityName": "Vessel",
+          "schema": {
+            "$ref": "#/backend/entities/Vessel"
+          },
+          "description": "Stores vessel information.",
+          "params": [
+            {
+              "name": "vesselId",
+              "description": "The unique identifier of the vessel."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/roles_admin/{userId}",
+        "definition": {
+          "entityName": "roles_admin",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Indicates admin role. Presence of a document grants admin privileges.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the admin user."
+            }
+          ]
+        }
+      },
+       {
+        "path": "/ships/{shipId}/medical-logs/{logId}",
+        "definition": {
+          "entityName": "MedicalLog",
+          "schema": {
+            "$ref": "#/backend/entities/MedicalLog"
+          },
+          "description": "Stores medical log entries for a specific ship.",
+          "params": [
+            {
+              "name": "shipId",
+              "description": "The unique identifier of the ship."
+            },
+            {
+              "name": "logId",
+              "description": "The unique identifier of the medical log entry."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/ships/{shipId}/non-medical-consumption/{logId}",
+        "definition": {
+          "entityName": "NonMedicalConsumptionLog",
+          "schema": {
+            "$ref": "#/backend/entities/NonMedicalConsumptionLog"
+          },
+          "description": "Stores non-medical consumption log entries for a specific ship.",
+          "params": [
+            {
+              "name": "shipId",
+              "description": "The unique identifier of the ship."
+            },
+            {
+              "name": "logId",
+              "description": "The unique identifier of the consumption log entry."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/ships/{shipId}/supply-logs/{logId}",
+        "definition": {
+          "entityName": "SupplyLog",
+          "schema": {
+            "$ref": "#/backend/entities/SupplyLog"
+          },
+          "description": "Stores supply log entries for a specific ship.",
+          "params": [
+            {
+              "name": "shipId",
+              "description": "The unique identifier of the ship."
+            },
+            {
+              "name": "logId",
+              "description": "The unique identifier of the supply log entry."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/ships/{shipId}/supply-logs/{logId}/items/{itemId}",
+        "definition": {
+          "entityName": "SuppliedItem",
+          "schema": {
+            "$ref": "#/backend/entities/SuppliedItem"
+          },
+          "description": "Stores the individual items within a supply log.",
+          "params": [
+            { "name": "shipId", "description": "The unique identifier of the ship." },
+            { "name": "logId", "description": "The unique identifier of the supply log." },
+            { "name": "itemId", "description": "The unique identifier of the supplied item." }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to manage users, vessels, and their associated inventory in the SeaMed Inventory application. It prioritizes authorization independence by denormalizing the vesselId into the users collection and segregates admin roles into a dedicated collection.  This approach facilitates robust security rules and efficient data retrieval.\n\n*   `/users/{userId}`: Stores user profiles. The `vesselId` is denormalized into this collection to avoid joins and enable independent authorization.  Roles are stored in the `role` field within the user document.\n*   `/vessels/{vesselId}`: Stores vessel information.  This collection provides core details about each vessel.\n*   `/roles_admin/{userId}`:  A presence-based role assignment. If a document exists for a `userId` in this collection, that user has admin privileges.\n* `/ships/{shipId}/medical-logs/{logId}`: This nested collection stores all medical log entries for a specific ship, ensuring data is co-located and queries for a single ship's log are efficient. \n* `/ships/{shipId}/non-medical-consumption/{logId}`: This collection tracks inventory loss for non-treatment reasons, like damage or expiry, ensuring a complete audit trail for all stock changes.\n* `/ships/{shipId}/supply-logs/{logId}`: This collection stores records of medicine supplies arranged for the vessel, helping to track shipments and logistics. A subcollection `items` is used to detail the contents of each supply."
+  }
+}
