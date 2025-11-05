@@ -1,43 +1,55 @@
+// src/types/index.ts
 
+import { Types } from "mongoose";
 
-export interface PersonInCharge {
+export interface IPersonInCharge {
+  id: string | Types.ObjectId;
   name: string;
   email: string;
   phone: string;
   phone2?: string;
 }
 
-export interface CompanyDoctor {
+export interface ICompanyDoctor {
+    id: string | Types.ObjectId;
   name: string;
   email: string;
   phone: string;
   phone2?: string;
 }
 
-export interface Company {
-  id: string;
+export interface ICompany {
+    id: string | Types.ObjectId;
   name: string;
   address: string;
   phone: string;
-  pic: PersonInCharge;
-  doctor: CompanyDoctor;
+  pic: IPersonInCharge;
+  doctor: ICompanyDoctor;
   medicalLogFormNumber?: string;
 }
 
 export type VesselCategory = 'A' | 'B' | 'C';
+export type IFlag =
+  | 'Panama'
+  | 'Liberia'
+  | 'Marshall Islands'
+  | 'Hong Kong'
+  | 'Singapore'
+  | 'India'
+  | 'Cayman Islands';
 
-export interface Ship {
-  id: string;
+export interface IShip {
+    id: string | Types.ObjectId;
   name: string;
   imo: string;
-  flag: Flag;
+  flag: IFlag;
   crewCount: number;
-  companyId: string;
+  companyId: string | Types.ObjectId;
   category: VesselCategory;
 }
 
-export interface Medicine {
-  id: string;
+export interface IMedicine {
+    id: string | Types.ObjectId;
   name: string;
   type: 'Medicine' | 'Equipment';
   category?: string | null;
@@ -47,40 +59,37 @@ export interface Medicine {
   notes: string | null;
 }
 
-export type Flag = 'Panama' | 'Liberia' | 'Marshall Islands' | 'Hong Kong' | 'Singapore' | 'India' | 'Cayman Islands';
-
-export interface Batch {
-  id: string;
-  inventoryItemId: string;
+export interface IBatch {
+    id: string | Types.ObjectId;
+  inventoryItemId: string | Types.ObjectId;
   quantity: number;
   batchNumber: string | null;
   expiryDate: Date | null;
   manufacturerName?: string | null;
 }
-
-export interface InventoryItem {
-  id: string;
-  shipId: string;
-  medicineId: string;
+export interface IInventoryItem {
+    id: string | Types.ObjectId;
+  shipId: string | Types.ObjectId;
+  medicineId: string | Types.ObjectId;
   medicineName: string;
   medicineCategory: string;
   type: 'Medicine' | 'Equipment';
   requiredQuantity: number;
   totalQuantity: number;
-  batches: Batch[];
+  batches: (string | Types.ObjectId | IBatch)[];
 }
 
-export interface MedicalLog {
-  id: string;
-  shipId: string;
+export interface IMedicalLog {
+    id: string | Types.ObjectId;
+  shipId: string | Types.ObjectId;
   date: Date;
   crewMemberName: string;
   rank: string;
   caseDescription: string;
-  medicineUsedId: string;
-  batchUsedId: string;
+  medicineUsedId?: string | Types.ObjectId;
+  batchUsedId?: string | Types.ObjectId;
   quantityUsed: number;
-  notes: string | null;
+  notes?: string | null;
   batchNumber?: string | null;
   expiryDate?: Date | null;
   photoUrl?: string | null;
@@ -89,54 +98,52 @@ export interface MedicalLog {
 export const NonMedicalConsumptionReasons = ['Damaged', 'Expired', 'Lost', 'Other'] as const;
 export type NonMedicalConsumptionReason = typeof NonMedicalConsumptionReasons[number];
 
-export interface NonMedicalConsumptionLog {
-  id: string;
-  shipId: string;
+export interface INonMedicalConsumptionLog {
+    id: string | Types.ObjectId;
+  shipId: string | Types.ObjectId;
   date: Date;
-  medicineId: string;
-  medicineName?: string;
-  batchId: string;
-  batchNumber?: string;
+  medicineId: string | Types.ObjectId;
+  medicineName?: string | null;
+  batchId?: string | Types.ObjectId | null;
+  batchNumber?: string | null;
   quantity: number;
   reason: NonMedicalConsumptionReason;
-  notes: string | null;
+  notes?: string | null;
 }
 
 export const SupplyLogStatuses = ['Pending', 'Shipped', 'Delivered', 'Cancelled'] as const;
 export type SupplyLogStatus = typeof SupplyLogStatuses[number];
 
-export interface SuppliedItem {
-    id: string;
-    supplyLogId: string;
-    medicineId: string;
-    medicineName: string; // Denormalized for display
-    manufacturerName: string | null;
-    batchNumber: string | null;
-    expiryDate: Date | null;
-    quantity: number;
-}
-
-export interface SupplyLog {
-    id: string;
-    shipId: string;
-    date: Date;
-    portOfSupply: string;
-    supplierName: string;
-    trackingNumber: string | null;
-    status: SupplyLogStatus;
-    notes: string | null;
-    orderListUrl?: string | null;
-    orderListFilename?: string | null;
-    items: SuppliedItem[];
+export interface ISuppliedItem {
+    id: string | Types.ObjectId;
+  medicineId: string | Types.ObjectId;
+  medicineName: string;
+  manufacturerName?: string;
+  batchNumber?: string;
+  expiryDate?: Date;
+  quantity: number;
 }
 
 
-export interface FlagRequirement {
-    medicineId: string;
-    // For Medicines
-    categoryA?: string;
-    categoryB?: string;
-    categoryC?: string;
-    // For Equipment
-    quantity?: string;
+
+export interface ISupplyLog {
+    id: string | Types.ObjectId;
+  shipId: string | Types.ObjectId;
+  date: Date;
+  portOfSupply: string;
+  supplierName: string;
+  trackingNumber?: string | null;
+  status: SupplyLogStatus;
+  notes?: string | null;
+  orderListUrl?: string | null;
+  orderListFilename?: string | null;
+  items: ISuppliedItem[];
+}
+
+export interface IFlagRequirement {
+  medicineId: string | Types.ObjectId;
+  categoryA?: string | null;
+  categoryB?: string | null;
+  categoryC?: string | null;
+  quantity?: string | null;
 }
