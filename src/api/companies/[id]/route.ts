@@ -1,0 +1,6 @@
+import { createEntityRoute } from "@/api/[entity]/[id]/route";
+import { Company } from "@/models/Company";
+const routes = createEntityRoute(Company);
+export const GET = routes.GET;
+export const PUT = routes.PUT;
+export const DELETE = routes.DELETE;
