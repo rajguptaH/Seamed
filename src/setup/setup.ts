@@ -1,5 +1,5 @@
 
-import { connectDB, disconnectDB } from '@/config/db';
+import { connectDB, disconnectDB } from '../config/db';
 import { seedCompanies } from './seedCompanies';
 import { seedFlagRequirements } from './seedFlagRequirements';
 import { seedMedicalLogs } from './seedMedicalLogs';

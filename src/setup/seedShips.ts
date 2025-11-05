@@ -4,7 +4,7 @@ import { IShip } from '../types';
 export async function seedShips(companyMap: Record<string, string>) {
   const ships: IShip[] = [
     {
-      id: 'ship1',
+    
       name: 'The Sea Explorer',
       imo: '9876543',
       flag: 'Panama',
@@ -13,7 +13,7 @@ export async function seedShips(companyMap: Record<string, string>) {
       category: 'A',
     },
     {
-      id: 'ship2',
+    
       name: 'The Ocean Voyager',
       imo: '1234567',
       flag: 'Liberia',
@@ -22,7 +22,7 @@ export async function seedShips(companyMap: Record<string, string>) {
       category: 'B',
     },
     {
-      id: 'ship3',
+    
       name: 'The Pacific Drifter',
       imo: '7654321',
       flag: 'Marshall Islands',

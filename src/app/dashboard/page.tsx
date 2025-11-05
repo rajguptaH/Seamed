@@ -1,25 +1,22 @@
 
+"use client";
 
 import { CompanyDashboard } from "@/components/companies/company-dashboard";
 import { DashboardSummary } from "@/components/dashboard/dashboard-summary";
 import { FlagInventoryRequirements } from "@/components/inventory/flag-inventory-requirements";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getCompanies, getInventoryForShip, getShips } from "@/lib/data";
-import type { Ship } from "@/types";
+import { useData } from "@/context/DataProvider";
+
 import { differenceInDays, isBefore } from "date-fns";
 
-
-export default async function DashboardPage({
-    searchParams,
-}: {
-    searchParams?: {
-        filter?: string;
-    };
-}) {
-  const [allShips, companies] = await Promise.all([
-    getShips(),
-    getCompanies(),
-  ]);
+interface DashboardPageProps {
+  searchParams?: {
+    filter?: string;
+  };
+}
+export default function DashboardPage({ searchParams }: DashboardPageProps) {
+    
+  const { getShips, getCompanies, getInventoryForShip } = useData();
   
   const shipsNeedingAttention: Ship[] = [];
 

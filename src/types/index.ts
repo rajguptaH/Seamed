@@ -3,7 +3,7 @@
 import { Types } from "mongoose";
 
 export interface IPersonInCharge {
-  id: string | Types.ObjectId;
+
   name: string;
   email: string;
   phone: string;
@@ -11,7 +11,7 @@ export interface IPersonInCharge {
 }
 
 export interface ICompanyDoctor {
-    id: string | Types.ObjectId;
+
   name: string;
   email: string;
   phone: string;
@@ -19,7 +19,7 @@ export interface ICompanyDoctor {
 }
 
 export interface ICompany {
-    id: string | Types.ObjectId;
+
   name: string;
   address: string;
   phone: string;
@@ -39,7 +39,7 @@ export type IFlag =
   | 'Cayman Islands';
 
 export interface IShip {
-    id: string | Types.ObjectId;
+
   name: string;
   imo: string;
   flag: IFlag;
@@ -49,7 +49,7 @@ export interface IShip {
 }
 
 export interface IMedicine {
-    id: string | Types.ObjectId;
+
   name: string;
   type: 'Medicine' | 'Equipment';
   category?: string | null;
@@ -60,7 +60,7 @@ export interface IMedicine {
 }
 
 export interface IBatch {
-    id: string | Types.ObjectId;
+
   inventoryItemId: string | Types.ObjectId;
   quantity: number;
   batchNumber: string | null;
@@ -68,7 +68,7 @@ export interface IBatch {
   manufacturerName?: string | null;
 }
 export interface IInventoryItem {
-    id: string | Types.ObjectId;
+
   shipId: string | Types.ObjectId;
   medicineId: string | Types.ObjectId;
   medicineName: string;
@@ -80,7 +80,7 @@ export interface IInventoryItem {
 }
 
 export interface IMedicalLog {
-    id: string | Types.ObjectId;
+
   shipId: string | Types.ObjectId;
   date: Date;
   crewMemberName: string;
@@ -99,7 +99,7 @@ export const NonMedicalConsumptionReasons = ['Damaged', 'Expired', 'Lost', 'Othe
 export type NonMedicalConsumptionReason = typeof NonMedicalConsumptionReasons[number];
 
 export interface INonMedicalConsumptionLog {
-    id: string | Types.ObjectId;
+
   shipId: string | Types.ObjectId;
   date: Date;
   medicineId: string | Types.ObjectId;
@@ -115,7 +115,6 @@ export const SupplyLogStatuses = ['Pending', 'Shipped', 'Delivered', 'Cancelled'
 export type SupplyLogStatus = typeof SupplyLogStatuses[number];
 
 export interface ISuppliedItem {
-    id: string | Types.ObjectId;
   medicineId: string | Types.ObjectId;
   medicineName: string;
   manufacturerName?: string;
@@ -127,7 +126,7 @@ export interface ISuppliedItem {
 
 
 export interface ISupplyLog {
-    id: string | Types.ObjectId;
+
   shipId: string | Types.ObjectId;
   date: Date;
   portOfSupply: string;

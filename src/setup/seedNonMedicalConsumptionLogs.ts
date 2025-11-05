@@ -4,7 +4,7 @@ import { INonMedicalConsumptionLog } from '../types';
 export async function seedNonMedicalConsumptionLogs(shipMap: Record<string, string>) {
   const nonMedicalConsumptionLogs: INonMedicalConsumptionLog[] = [
     {
-      id: 'nmlog1',
+      
       shipId: shipMap['The Sea Explorer'],
       date: new Date('2024-06-15T10:00:00Z'),
       medicineId: 'med2',

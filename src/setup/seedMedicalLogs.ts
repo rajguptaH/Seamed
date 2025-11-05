@@ -4,8 +4,7 @@ import { IMedicalLog } from '../types';
 export async function seedMedicalLogs(shipMap: Record<string, string>) {
   const medicalLogs: IMedicalLog[] = [
     {
-      id: 'medlog1',
-      shipId: shipMap['The Sea Explorer'],
+         shipId: shipMap['The Sea Explorer'],
       date: new Date('2024-06-05T10:00:00Z'),
       crewMemberName: 'John Doe',
       rank: 'Deck Cadet',
@@ -17,8 +16,7 @@ export async function seedMedicalLogs(shipMap: Record<string, string>) {
       photoUrl: 'https://picsum.photos/seed/medlog1/600/400',
     },
     {
-      id: 'medlog2',
-      shipId: shipMap['The Sea Explorer'],
+         shipId: shipMap['The Sea Explorer'],
       date: new Date('2024-05-20T10:00:00Z'),
       crewMemberName: 'Jane Smith',
       rank: 'Chief Mate',

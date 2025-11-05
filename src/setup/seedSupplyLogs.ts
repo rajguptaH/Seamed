@@ -4,7 +4,7 @@ import { ISupplyLog } from '../types';
 export async function seedSupplyLogs(shipMap: Record<string, string>) {
   const supplyLogs: ISupplyLog[] = [
     {
-      id: 'sup1',
+
       shipId: shipMap['The Sea Explorer'],
       date: new Date('2024-06-18T14:00:00Z'),
       portOfSupply: 'Singapore',
@@ -15,7 +15,7 @@ export async function seedSupplyLogs(shipMap: Record<string, string>) {
       items: [],
     },
     {
-      id: 'sup2',
+
       shipId: shipMap['The Sea Explorer'],
       date: new Date('2024-07-10T09:00:00Z'),
       portOfSupply: 'Rotterdam',

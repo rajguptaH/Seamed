@@ -8,7 +8,6 @@ export async function seedShipInventory(
   const shipInventory: Record<string, IInventoryItem[]> = {
     [shipMap['The Sea Explorer']]: [
       {
-        id: 'inv1',
         shipId: shipMap['The Sea Explorer'],
         medicineId: medicineMap['Acetylsalicylic acid'],
         medicineName: 'Acetylsalicylic acid',
@@ -18,7 +17,6 @@ export async function seedShipInventory(
         requiredQuantity: 50,
         batches: [
           {
-            id: 'batch1',
             inventoryItemId: 'inv1',
             quantity: 20,
             batchNumber: 'A123',
@@ -26,7 +24,6 @@ export async function seedShipInventory(
             manufacturerName: 'Aspirin',
           },
           {
-            id: 'batch2',
             inventoryItemId: 'inv1',
             quantity: 25,
             batchNumber: 'B456',
@@ -36,7 +33,6 @@ export async function seedShipInventory(
         ],
       },
       {
-        id: 'inv2',
         shipId: shipMap['The Sea Explorer'],
         medicineId: medicineMap['Aciclovir'],
         medicineName: 'Aciclovir',
@@ -46,7 +42,6 @@ export async function seedShipInventory(
         requiredQuantity: 70,
         batches: [
           {
-            id: 'batch3',
             inventoryItemId: 'inv2',
             quantity: 60,
             batchNumber: 'C789',
@@ -55,7 +50,6 @@ export async function seedShipInventory(
         ],
       },
       {
-        id: 'inv4',
         shipId: shipMap['The Sea Explorer'],
         medicineId: 'eq1',
         medicineName: 'Portable oxygen set, complete',
@@ -65,7 +59,6 @@ export async function seedShipInventory(
         requiredQuantity: 1,
         batches: [
           {
-            id: 'batch5',
             inventoryItemId: 'inv4',
             quantity: 1,
             batchNumber: null,
@@ -77,7 +70,6 @@ export async function seedShipInventory(
 
     [shipMap['The Ocean Voyager']]: [
       {
-        id: 'inv3',
         shipId: shipMap['The Ocean Voyager'],
         medicineId: medicineMap['Acetylsalicylic acid'],
         medicineName: 'Acetylsalicylic acid',
@@ -87,7 +79,6 @@ export async function seedShipInventory(
         requiredQuantity: 50,
         batches: [
           {
-            id: 'batch4',
             inventoryItemId: 'inv3',
             quantity: 40,
             batchNumber: 'D111',
