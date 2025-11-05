@@ -1,18 +1,22 @@
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
+import * as dotenv from 'dotenv';
+import mongoose, { Mongoose } from 'mongoose';
 
 dotenv.config();
 
 /**
- * Connects to MongoDB using Mongoose
+ * Connects to MongoDB using Mongoose.
+ * Uses the MONGO_URI from environment variables.
+ * @returns The Mongoose connection object
+ * @throws Throws an error if MONGO_URI is missing or connection fails
  */
-export const connectDB = async (): Promise<typeof mongoose> => {
-  if (!process.env.MONGO_URI) {
+export const connectDB = async (): Promise<Mongoose> => {
+  const uri = process.env.MONGO_URI;
+  if (!uri) {
     throw new Error('❌ Missing MONGO_URI in environment variables');
   }
 
   try {
-    const connection = await mongoose.connect(process.env.MONGO_URI);
+    const connection = await mongoose.connect(uri);
     console.log(`✅ Connected to MongoDB: ${connection.connection.host}`);
     return connection;
   } catch (error) {
@@ -22,7 +26,8 @@ export const connectDB = async (): Promise<typeof mongoose> => {
 };
 
 /**
- * Disconnects from MongoDB
+ * Disconnects from MongoDB.
+ * Logs errors if any occur during disconnection.
  */
 export const disconnectDB = async (): Promise<void> => {
   try {
