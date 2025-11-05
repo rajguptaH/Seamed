@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import mongoose, { Mongoose } from 'mongoose';
 
-dotenv.config();
+dotenv.config({ path: ".env" });
 
 /**
  * Connects to MongoDB using Mongoose.

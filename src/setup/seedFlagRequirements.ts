@@ -1,36 +1,37 @@
-import { FlagRequirement } from '../models/FlagRequirement';
-import { Medicine } from '../models/Medicine';
-import { IFlagRequirement } from '../types';
 
-/**
- * Seeds flag requirements automatically using medicines and equipment
- * from the Medicine collection — no need for separate maps.
- */
-export async function seedFlagRequirements(): Promise<void> {
-  console.log('🚀 Seeding flag requirements...');
+import * as dotenv from "dotenv";
+import { MongoClient } from "mongodb";
 
-  // Fetch all medicine/equipment entries
-  const allItems = await Medicine.find();
+dotenv.config({ path: ".env" });
 
-  if (allItems.length === 0) {
-    throw new Error('No medicines or equipment found. Please seed medicines first.');
-  }
+const uri = "mongodb://localhost:27017/seamed";
+if (!uri) {
+  throw new Error("MONGODB_URI is not defined in .env");
+}
 
-  // Define your flags (countries)
-  const flags = [
-    'Panama',
-    'Liberia',
-    'Marshall Islands',
-    'Hong Kong',
-    'Singapore',
-    'India',
-    'Cayman Islands',
-  ];
+const client = new MongoClient(uri);
 
-  // --- DEFAULT REQUIREMENTS ---
-  const defaultRequirements: Partial<IFlagRequirement>[] = [
-    // Medicines
-    { categoryA: '50', categoryB: '50', categoryC: '-' },
+async function seedFlagRequirements() {
+try {
+await client.connect();
+const db = client.db();
+
+
+// Fetch all medicines/equipment
+const allItems = await db.collection("medicines").find().toArray();
+
+if (allItems.length === 0) {
+  console.error("❌ No medicines/equipment found. Please seed medicines first.");
+  return;
+}
+
+const flags = [
+  'Panama', 'Liberia', 'Marshall Islands', 'Hong Kong', 'Singapore', 'India', 'Cayman Islands'
+];
+
+// Default requirements template
+const defaultRequirements: Partial<any>[] = [
+     { categoryA: '50', categoryB: '50', categoryC: '-' },
     { categoryA: '70+', categoryB: '35+', categoryC: '-' },
     { categoryA: '10+', categoryB: '5+', categoryC: '5+' },
     { categoryA: '20', categoryB: '10', categoryC: '-' },
@@ -107,31 +108,34 @@ export async function seedFlagRequirements(): Promise<void> {
     { quantity: '1' }, { quantity: '3' }, { quantity: '1' }, { quantity: '20' },
     { quantity: '3' }, { quantity: '10' }, { quantity: '12' }, { quantity: '1' },
     { quantity: '10' }, { quantity: '200' }, { quantity: '1' }, { quantity: '1' },
-  ];
+];
 
-  if (defaultRequirements.length < allItems.length) {
-    console.warn(`⚠️ Only ${defaultRequirements.length} default requirements provided for ${allItems.length} items.`);
-  }
+// Merge items with requirements
+const mergedRequirements = allItems.map((item, idx) => ({
+  medicineId: item._id.toString(),
+  ...(defaultRequirements[idx] || { categoryA: '-', categoryB: '-', categoryC: '-', quantity: '1' }),
+}));
 
-  // Merge each medicine/equipment with its requirement row
-  const mergedRequirements = allItems.map((item, idx) => ({
-    medicineId: item._id,
-    ...defaultRequirements[idx] || { categoryA: '-', categoryB: '-', categoryC: '-', quantity: '1' },
-  }));
+// Expand for all flags
+const allFlagRequirements = flags.flatMap(flag =>
+  mergedRequirements.map(req => ({
+    ...req,
+    flag,
+  }))
+);
 
-  // Replicate for all flags
-  const allFlagRequirements: IFlagRequirement[] = flags.flatMap((flag) =>
-    mergedRequirements.map((req) => ({
-      ...req,
-      // ensure medicineId is a string (IFlagRequirement expects string | ObjectId)
-      medicineId: String(req.medicineId),
-      flag,
-    }))
-  );
+// Clean previous data
+await db.collection("flagRequirements").deleteMany({});
+const result = await db.collection("flagRequirements").insertMany(allFlagRequirements);
 
-  // Clean insert
-  await FlagRequirement.deleteMany({});
-  const docs = await FlagRequirement.insertMany(allFlagRequirements);
+console.log(`✅ Inserted ${result.insertedCount} flag requirements across ${flags.length} flags`);
 
-  console.log(`✅ Inserted ${docs.length} flag requirements across ${flags.length} flags`);
+} catch (err) {
+console.error("❌ Seeding flag requirements failed:", err);
+} finally {
+await client.close();
+process.exit(0);
 }
+}
+
+seedFlagRequirements();

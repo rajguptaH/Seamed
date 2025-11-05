@@ -1,33 +1,37 @@
 
+import { exec } from 'child_process';
+import * as path from 'path';
 import { connectDB, disconnectDB } from '../config/db';
-import { seedCompanies } from './seedCompanies';
-import { seedFlagRequirements } from './seedFlagRequirements';
-import { seedMedicalLogs } from './seedMedicalLogs';
-import { seedMedicines } from './seedMedicines';
-import { seedNonMedicalConsumptionLogs } from './seedNonMedicalConsumptionLogs';
-import { seedShipInventory } from './seedShipInventory';
-import { seedShips } from './seedShips';
-import { seedSupplyLogs } from './seedSupplyLogs';
+async function runScript(scriptPath: string) {
+  return new Promise<void>((resolve, reject) => {
+  
+    console.log(`🚀 Running ${path.basename(scriptPath)}...`);
+    exec(`npx tsx ${scriptPath}`, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`❌ Error in ${scriptPath}:`, stderr || error.message);
+        reject(error);
+        return;
+      }
+      console.log(stdout);
+      resolve();
+    });
+  });
+}
+
 
 async function main() {
   try {
     await connectDB();
 
-    // 1️⃣ Company and Ship Seeding
-    const companyMap = await seedCompanies();
-    const shipMap = await seedShips(companyMap);
+    await runScript("src/setup/seedCompanies.ts");
+    await runScript("src/setup/seedShips.ts");
+    await runScript("src/setup/seedMedicines.ts");
+    await runScript("src/setup/seedMedicalLogs.ts");
+    await runScript("src/setup/seedSupplyLogs.ts");
+    await runScript("src/setup/seedNonMedicalConsumptionLogs.ts");
+    await runScript("src/setup/seedShipInventory.ts");
+    await runScript("src/setup/seedFlagRequirements.ts");
 
-    // 2️⃣ Medicines and Related Data
-    const medicineMap = await seedMedicines();
-
-    // 3️⃣ Logs and Inventories
-    await seedMedicalLogs(shipMap);
-    await seedNonMedicalConsumptionLogs(shipMap);
-    await seedSupplyLogs(shipMap);
-    await seedShipInventory(shipMap, medicineMap);
-
-    // 4️⃣ Flag Requirements
-    await seedFlagRequirements();
 
     console.log('🌱 Database seeding completed successfully!');
   } catch (error) {
