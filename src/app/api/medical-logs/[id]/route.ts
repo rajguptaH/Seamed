@@ -1,4 +1,4 @@
-import { createEntityRoute } from "@/api/[entity]/[id]/route";
+import { createEntityRoute } from "@/app/api/[entity]/[id]/route";
 import { MedicalLog } from "@/models/MedicalLog";
 
 const routes = createEntityRoute(MedicalLog);

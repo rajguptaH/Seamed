@@ -1,12 +1,12 @@
 
 
-import { getShips, getInventoryForShip, getCompanies } from "@/lib/data";
+import { CompanyDashboard } from "@/components/companies/company-dashboard";
 import { DashboardSummary } from "@/components/dashboard/dashboard-summary";
 import { FlagInventoryRequirements } from "@/components/inventory/flag-inventory-requirements";
-import { CompanyDashboard } from "@/components/companies/company-dashboard";
-import { differenceInDays, isBefore } from "date-fns";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getCompanies, getInventoryForShip, getShips } from "@/lib/data";
 import type { Ship } from "@/types";
+import { differenceInDays, isBefore } from "date-fns";
 
 
 export default async function DashboardPage({
