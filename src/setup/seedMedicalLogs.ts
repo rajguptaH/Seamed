@@ -35,7 +35,7 @@ async function seedMedicalLogs() {
   try {
     await client.connect();
     const db = client.db();
-    await db.collection("medicalLogs").deleteMany({});
+    await db.collection("medicallogs").deleteMany({});
     const result = await db.collection("medicalLogs").insertMany(medicalLogs);
     console.log(`✅ Inserted ${result.insertedCount} medical logs`);
   } catch (err) {

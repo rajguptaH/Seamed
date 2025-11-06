@@ -1,12 +1,12 @@
 
 "use client";
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { InventoryItem, Medicine } from "@/types";
-import { useState } from "react";
 import { add } from "date-fns";
+import { useState } from "react";
 import { InventoryTable } from "./inventory-table";
 import { InventoryToolbar } from "./inventory-toolbar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { NonMandatoryInventoryTable } from "./non-mandatory-inventory-table";
 
 
@@ -22,7 +22,6 @@ interface ShipInventoryTabsProps {
 
 export function ShipInventoryTabs({ medicines, equipment, nonMandatory, shipId, allItems }: ShipInventoryTabsProps) {
   const [filter, setFilter] = useState<ExpiryFilter>("all");
-
   const filterInventory = (inventory: InventoryItem[]) => {
     if (filter === 'all') return inventory;
     

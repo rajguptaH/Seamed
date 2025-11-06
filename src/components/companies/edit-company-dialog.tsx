@@ -1,7 +1,6 @@
 
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,11 +10,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useState } from "react";
 import { EditCompanyForm } from "./edit-company-form";
-import type { Company } from "@/types";
-import { Pencil } from "lucide-react";
 
-export function EditCompanyDialog({ company }: { company: Company }) {
+import { Pencil } from "lucide-react";
+import { ICompany } from "@/types";
+
+export function EditCompanyDialog({ company }: { company: ICompany }) {
   const [open, setOpen] = useState(false);
 
   return (

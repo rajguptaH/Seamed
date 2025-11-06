@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useActionState, useEffect, useRef } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -11,17 +11,20 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { useData } from "@/context/DataProvider";
 import { useToast } from "@/hooks/use-toast";
+import { ICompany } from "@/types";
+import { API_ENTITIES, API_ROUTES } from "@/utils/routes";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { updateCompanyAction } from "@/lib/actions";
 import { Textarea } from "../ui/textarea";
-import type { Company } from "@/types";
+
+
 
 const CompanySchema = z.object({
-  id: z.string(),
+  _id: z.string(),
   name: z.string().min(3, "Company name must be at least 3 characters long."),
   address: z.string().min(10, "Address must be at least 10 characters long."),
   phone: z.string().min(10, "Phone number must be at least 10 characters long."),
@@ -36,18 +39,19 @@ const CompanySchema = z.object({
   doctorPhone2: z.string().optional(),
 });
 
-export function EditCompanyForm({ company, onFormSubmit }: { company: Company, onFormSubmit: () => void }) {
-  const [state, dispatch] = useActionState(updateCompanyAction, {
-    message: "",
-    errors: {},
-  });
+export function EditCompanyForm({ company, onFormSubmit }: { company: ICompany, onFormSubmit: () => void }) {
+
   const { toast } = useToast();
+  const { updateEntity } = useData();
   const formRef = useRef<HTMLFormElement>(null);
+  // console.log("updateEntity:", updateEntity);
+  // console.log("API_ENTITIES:", API_ENTITIES);
+  // console.log("API_ROUTES:", API_ROUTES);
 
   const form = useForm<z.infer<typeof CompanySchema>>({
     resolver: zodResolver(CompanySchema),
     defaultValues: {
-      id: company.id,
+      _id: company._id,
       name: company.name,
       address: company.address,
       phone: company.phone,
@@ -62,28 +66,54 @@ export function EditCompanyForm({ company, onFormSubmit }: { company: Company, o
       doctorPhone2: company.doctor.phone2 || "",
     },
   });
+  // ✅ Reusable form submission handler (via context)
+  async function onSubmit(values: z.infer<typeof CompanySchema>) {
+    console.log("Submitting form ", values)
+    try {
+      const payload = {
+        name: values.name,
+        address: values.address,
+        phone: values.phone,
+        medicalLogFormNumber: values.medicalLogFormNumber,
+        pic: {
+          name: values.picName,
+          email: values.picEmail,
+          phone: values.picPhone,
+          phone2: values.picPhone2,
+        },
+        doctor: {
+          name: values.doctorName,
+          email: values.doctorEmail,
+          phone: values.doctorPhone,
+          phone2: values.doctorPhone2,
+        },
+      };
 
-  useEffect(() => {
-    if (state.message && !state.errors) {
+      // ✅ Use DataContext updateEntity (auto refreshes cache)
+      await updateEntity(API_ENTITIES.companies, API_ROUTES.companies, values._id, payload);
+
       toast({
         title: "Success",
-        description: state.message,
+        description: "Company updated successfully!",
       });
+
       onFormSubmit();
-    } else if (state.message && state.errors) {
-       toast({
+    } catch (error: any) {
+      toast({
         title: "Error",
-        description: state.message,
+        description: error.message || "Failed to update company.",
         variant: "destructive",
       });
     }
-  }, [state, onFormSubmit, toast, form]);
+  }
 
 
   return (
     <Form {...form}>
-      <form ref={formRef} action={dispatch} className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto pr-2">
-        <input type="hidden" name="id" value={company.id} />
+      <form onSubmit={form.handleSubmit(onSubmit, (errors) => {
+        console.log("Validation errors:", errors);
+      })} className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto pr-2">
+        <input type="hidden" name="_id" value={company._id} />
         <FormField
           control={form.control}
           name="name"
@@ -138,7 +168,7 @@ export function EditCompanyForm({ company, onFormSubmit }: { company: Company, o
         />
 
         <h4 className="font-semibold text-md border-t pt-4 mt-2">Person in Charge (PIC)</h4>
-         <FormField
+        <FormField
           control={form.control}
           name="picName"
           render={({ field }) => (
@@ -247,6 +277,6 @@ export function EditCompanyForm({ company, onFormSubmit }: { company: Company, o
           Save Changes
         </Button>
       </form>
-    </Form>
+    </Form >
   );
 }

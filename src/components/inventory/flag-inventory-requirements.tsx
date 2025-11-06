@@ -1,16 +1,17 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getFlagRequirements, getMedicines } from "@/lib/data";
-import { Flag } from "@/types";
-import { EditableFlagInventoryTable } from "./editable-flag-inventory-table";
+
+import { IFlag } from "@/types";
 import { EditableEquipmentInventoryTable } from "./editable-equipment-inventory-table";
+import { EditableFlagInventoryTable } from "./editable-flag-inventory-table";
 
 export async function FlagInventoryRequirements() {
   const [flagRequirements, allItems] = await Promise.all([
     getFlagRequirements(),
     getMedicines()
   ]);
-  const flags = Object.keys(flagRequirements) as Flag[];
+  const flags = Object.keys(flagRequirements) as IFlag[];
   const medicines = allItems.filter(item => item.type === 'Medicine');
   const equipments = allItems.filter(item => item.type === 'Equipment');
 
