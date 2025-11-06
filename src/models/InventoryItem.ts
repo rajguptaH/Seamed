@@ -1,5 +1,4 @@
-// 📄 src/models/InventoryItem.ts
-import { Document, model, Schema, Types } from "mongoose";
+import { Document, model, models, Schema, Types } from "mongoose";
 import { IInventoryItem } from "../types";
 
 interface IInventoryItemDoc extends IInventoryItem, Document {
@@ -17,12 +16,10 @@ const inventoryItemSchema = new Schema<IInventoryItemDoc>(
     type: String,
     requiredQuantity: Number,
     totalQuantity: Number,
-    batches: [{ type: Schema.Types.ObjectId, ref: "Batch" }], // ✅ ref matches model name
+    batches: [{ type: Schema.Types.ObjectId, ref: "Batch", default: [] }],
   },
   { timestamps: true }
 );
 
-export const InventoryItem = model<IInventoryItemDoc>(
-  "InventoryItem",
-  inventoryItemSchema
-);
+export const InventoryItem =
+  models.InventoryItem || model<IInventoryItemDoc>("InventoryItem", inventoryItemSchema);

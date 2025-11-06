@@ -1,12 +1,12 @@
-import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Ship as ShipIcon, Users, Flag, Badge } from "lucide-react";
-import type { Ship } from "@/types";
 import { Badge as BadgeComponent } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { Ship } from "@/types";
+import { Flag, Ship as ShipIcon, Users } from "lucide-react";
+import Link from "next/link";
 
 export function ShipCard({ ship }: { ship: Ship }) {
   return (
-    <Link href={`/ships/${ship.id}`}>
+    <Link href={`/ships/${ship._id}`}>
       <Card className="hover:shadow-md hover:border-primary/50 transition-all duration-300 h-full">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-lg font-medium font-headline">

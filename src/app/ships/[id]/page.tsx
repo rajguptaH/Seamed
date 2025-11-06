@@ -1,19 +1,17 @@
 
 
-import { notFound } from "next/navigation";
-import Link from "next/link";
-import { getShipById, getInventoryForShip, getMedicines, getMedicalLogsForShip, getNonMedicalConsumptionLogsForShip, getCompanyById, getSupplyLogsForShip } from "@/lib/data";
-import { Header } from "@/components/layout/header";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, Ship, Users, Notebook, Flag, Bot, Building, Phone, User, Stethoscope } from "lucide-react";
-import { ShipInventoryTabs } from "@/components/inventory/ship-inventory-tabs";
-import { Badge } from "@/components/ui/badge";
-import type { InventoryItem } from "@/types";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { MedicalLogTable } from "@/components/medical-log/medical-log-table";
 import { NonMedicalConsumptionTable } from "@/components/consumption-log/non-medical-consumption-table";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ShipInventoryTabs } from "@/components/inventory/ship-inventory-tabs";
+import { MedicalLogTable } from "@/components/medical-log/medical-log-table";
 import { SupplyLogTable } from "@/components/supply-log/supply-log-table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getCompanyById, getInventoryForShip, getMedicalLogsForShip, getMedicines, getNonMedicalConsumptionLogsForShip, getShipById, getSupplyLogsForShip } from "@/lib/data";
+import { ArrowLeft, Bot, Building, Flag, Phone, Ship, Stethoscope, User, Users } from "lucide-react";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 
 export default async function ShipDetailsPage({
   params,

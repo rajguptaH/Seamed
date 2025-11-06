@@ -1,3 +1,4 @@
+// src/models/Batch.ts
 import { Document, Schema, Types, model, models } from 'mongoose';
 import { IBatch } from '../types';
 
@@ -16,5 +17,4 @@ const batchSchema = new Schema<IBatchDoc>(
   { timestamps: true }
 );
 
-
-export const Batch = models.Batch || model<IBatchDoc>("Batch", batchSchema);
+export const Batch = models.Batch || model<IBatchDoc>('Batch', batchSchema);

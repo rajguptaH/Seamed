@@ -23,7 +23,7 @@ export default function DashboardClient() {
     fetchEntity(API_ENTITIES.ships, API_ROUTES.ships);
     fetchEntity(API_ENTITIES.companies, API_ROUTES.companies);
   }, [fetchEntity]);
-
+console.log("Data fropm Context API " , data)
   const allShips = useMemo(() => data.ships || [], [data.ships]);
   const companies = useMemo(() => data.companies || [], [data.companies]);
 
@@ -33,10 +33,10 @@ export default function DashboardClient() {
 
     const checkInventory = async () => {
       const shipsWithIssues = [];
-
+console.log("All Ships ", allShips)
       for (const ship of allShips) {
         const inventory = await fetchEntity(
-          API_ENTITIES.ships,
+          API_ENTITIES.inventories,
           `/api/ships/${ship._id}/inventory`
         );
 
@@ -69,7 +69,7 @@ export default function DashboardClient() {
     filter === "needs_attention"
       ? allShips.filter((ship) => shipsNeedingAttentionIds.has(ship.id))
       : allShips;
-
+console.log("Ship To Show" , shipsToShow)
   const totalCrew = allShips.reduce((acc, ship) => acc + (ship.crewCount || 0), 0);
   const shipsWithExpiringItems = shipsNeedingAttention.length;
   const shipsNeedingAttentionNames = shipsNeedingAttention.map((s) => s.name);

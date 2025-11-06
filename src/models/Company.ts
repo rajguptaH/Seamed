@@ -1,7 +1,7 @@
-import { Document, model, Schema } from 'mongoose';
+// src/models/Company.ts
+import { Document, Schema, model, models } from 'mongoose';
 import { ICompany } from '../types';
 
-// Remove the interface extending Document
 export type ICompanyDoc = Omit<ICompany, 'id'> & Document;
 
 const personInChargeSchema = new Schema(
@@ -11,7 +11,7 @@ const personInChargeSchema = new Schema(
     phone: { type: String, required: true },
     phone2: String,
   },
-  { _id: true } // automatically creates an ObjectId
+  { _id: false }
 );
 
 const doctorSchema = new Schema(
@@ -21,7 +21,7 @@ const doctorSchema = new Schema(
     phone: { type: String, required: true },
     phone2: String,
   },
-  { _id: true }
+  { _id: false }
 );
 
 const companySchema = new Schema<ICompanyDoc>(
@@ -36,4 +36,4 @@ const companySchema = new Schema<ICompanyDoc>(
   { timestamps: true }
 );
 
-export const Company = model<ICompanyDoc>('Company', companySchema);
+export const Company = models.Company || model<ICompanyDoc>('Company', companySchema);

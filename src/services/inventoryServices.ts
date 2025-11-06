@@ -4,6 +4,10 @@ import { InventoryItem } from "@/models/InventoryItem";
 import { Medicine } from "@/models/Medicine";
 import { Ship } from "@/models/Ship";
 import { IInventoryItem } from "@/types";
+
+export function getShipById(shipId: string) {
+  return Ship.findById(shipId).lean();
+}
 /**
  * Builds a detailed inventory list for a given ship using MongoDB.
  * - Fetches the ship, flag requirements, and all medicines.
@@ -14,18 +18,19 @@ export async function getInventoryForShip(shipId: string): Promise<IInventoryIte
   await connectDB();
 
   // 1️⃣ Find the ship
-const ship = await Ship.findById(shipId); 
+  const ship = await getShipById(shipId);
 
   if (!ship) {
     throw new Error("Ship not found");
   }
+
 
   // 2️⃣ Get all medicines and flag requirements
   const [medicines, flagReqs] = await Promise.all([
     Medicine.find(),
     FlagRequirement.find().lean(),
   ]);
-
+console.log("Flag Requirements:", flagReqs);
   // Filter flag requirements by ship’s flag (if you store by flag)
   // e.g. If you have `flag` field in FlagRequirement, add this line:
   // const flagReqs = await FlagRequirement.find({ flag: ship.flag }).lean();

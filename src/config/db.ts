@@ -17,7 +17,10 @@ export const connectDB = async (): Promise<Mongoose> => {
 
   try {
     const connection = await mongoose.connect(uri);
+ 
+    // await import("@/models/Batch");
     console.log(`✅ Connected to MongoDB: ${connection.connection.host}`);
+    console.log(Object.keys(mongoose.models));
     return connection;
   } catch (error) {
     console.error('❌ MongoDB connection failed:', error);

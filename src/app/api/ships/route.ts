@@ -7,6 +7,7 @@ export async function GET() {
   try {
     await connectDB();
     const ships = await Ship.find().lean();
+    console.log("Ships fetched from DB:", ships);
     return NextResponse.json(ships, { status: 200 });
   } catch (error) {
     console.error("Error fetching ships:", error);
