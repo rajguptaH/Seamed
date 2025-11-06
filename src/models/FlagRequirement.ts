@@ -1,18 +1,17 @@
-import { Document, Schema, Types, model } from 'mongoose';
-import { IFlagRequirement } from '../types';
+import { Document, Schema, Types, model, models } from "mongoose";
+import { IFlagRequirement } from "../types";
+
 export interface IFlagRequirementDoc extends IFlagRequirement, Document {
   medicineId: Types.ObjectId;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-
-
 const flagRequirementSchema = new Schema<IFlagRequirementDoc>(
   {
     medicineId: {
       type: Schema.Types.ObjectId,
-      ref: 'Medicine',
+      ref: "Medicine",
       required: true,
     },
     categoryA: {
@@ -35,11 +34,17 @@ const flagRequirementSchema = new Schema<IFlagRequirementDoc>(
       trim: true,
       default: null,
     },
-  },  
+  },
+  {
+    timestamps: true, // optional but useful
+  }
 );
 
 // --- Indexes ---
 flagRequirementSchema.index({ medicineId: 1 });
 
 // --- Model Export ---
-export const FlagRequirement = model<IFlagRequirementDoc>('FlagRequirement', flagRequirementSchema);
+// ✅ Prevent OverwriteModelError in Next.js dev mode
+export const FlagRequirement =
+  models.FlagRequirement ||
+  model<IFlagRequirementDoc>("FlagRequirement", flagRequirementSchema);

@@ -1,5 +1,6 @@
-import { Document, Schema, Types, model } from 'mongoose';
+import { Document, Schema, Types, model, models } from 'mongoose';
 import { IShip } from '../types';
+
 export interface IShipDoc extends IShip, Document {
   companyId: Types.ObjectId;
   createdAt?: Date;
@@ -17,7 +18,7 @@ const shipSchema = new Schema<IShipDoc>(
     imo: {
       type: String,
       required: true,
-      unique: true,
+      unique: true, // ✅ already creates a unique index
       trim: true,
       match: [/^\d{7}$/, 'IMO number must be a 7-digit numeric string'],
     },
@@ -49,14 +50,14 @@ const shipSchema = new Schema<IShipDoc>(
       enum: ['A', 'B', 'C'],
       required: true,
     },
-  },  
+  },
+  { timestamps: true }
 );
 
 // --- Indexes for Query Performance ---
-shipSchema.index({ imo: 1 }, { unique: true });
 shipSchema.index({ companyId: 1 });
 shipSchema.index({ flag: 1 });
 shipSchema.index({ category: 1 });
 
 // --- Model Export ---
-export const Ship = model<IShipDoc>('Ship', shipSchema);
+export const Ship = models.Ship || model<IShipDoc>('Ship', shipSchema);

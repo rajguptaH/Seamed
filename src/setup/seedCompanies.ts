@@ -1,5 +1,6 @@
 import * as dotenv from "dotenv";
-import { MongoClient, ObjectId } from "mongodb";
+import { MongoClient } from "mongodb";
+import { objectIds } from "./seedObjectIds";
 
 dotenv.config({ path: ".env" });
 
@@ -12,18 +13,19 @@ const client = new MongoClient(uri);
 
 const companies = [
   {
+    _id: objectIds.companies.globalMaritimeGroup,
     name: 'Global Maritime Group',
     address: '123 Ocean Ave, Maritime City, 12345',
     phone: '+1-234-567-8901',
     pic: {
-      _id: new ObjectId(),
+      _id: objectIds.users.adminJohn,
       name: 'John Admin',
       email: '[admin@globalmaritime.com](mailto:admin@globalmaritime.com)',
       phone: '+1-234-567-8902',
       phone2: '+1-234-567-8904',
     },
     doctor: {
-      _id: new ObjectId(),
+      _id: objectIds.users.doctorSmith,
       name: 'Dr. Smith',
       email: '[doctor@globalmaritime.com](mailto:doctor@globalmaritime.com)',
       phone: '+1-234-567-8903',
@@ -32,17 +34,18 @@ const companies = [
     medicalLogFormNumber: 'GMG-ML-001',
   },
   {
+    _id: objectIds.companies.oceanicShipping,
     name: 'Oceanic Shipping Co.',
     address: '456 Sea Lane, Port Town, 67890',
     phone: '+1-987-654-3210',
     pic: {
-      _id: new ObjectId(),
+       _id: objectIds.users.operatorJane,
       name: 'Jane Operator',
       email: '[ops@oceanicshipping.com](mailto:ops@oceanicshipping.com)',
       phone: '+1-987-654-3211',
     },
     doctor: {
-      _id: new ObjectId(),
+       _id: objectIds.users.doctorJones,
       name: 'Dr. Jones',
       email: '[medic@oceanicshipping.com](mailto:medic@oceanicshipping.com)',
       phone: '+1-987-654-3212',

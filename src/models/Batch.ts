@@ -1,4 +1,4 @@
-import { Document, Schema, Types, model } from 'mongoose';
+import { Document, Schema, Types, model, models } from 'mongoose';
 import { IBatch } from '../types';
 
 interface IBatchDoc extends IBatch, Document {
@@ -7,7 +7,7 @@ interface IBatchDoc extends IBatch, Document {
 
 const batchSchema = new Schema<IBatchDoc>(
   {
-        inventoryItemId: { type: Schema.Types.ObjectId, ref: 'InventoryItem', required: true },
+    inventoryItemId: { type: Schema.Types.ObjectId, ref: 'InventoryItem', required: true },
     quantity: { type: Number, required: true },
     batchNumber: String,
     expiryDate: Date,
@@ -16,4 +16,5 @@ const batchSchema = new Schema<IBatchDoc>(
   { timestamps: true }
 );
 
-export const Batch = model<IBatchDoc>('Batch', batchSchema);
+
+export const Batch = models.Batch || model<IBatchDoc>("Batch", batchSchema);

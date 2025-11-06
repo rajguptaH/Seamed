@@ -4,6 +4,7 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import type { PharmacistDetails } from './certificate-data';
+import { IInventoryItem } from '@/types';
 
 // --- MOCKED DATA ---
 
@@ -428,7 +429,7 @@ export async function getSupplyLogsForShip(shipId: string): Promise<SupplyLog[]>
 }
 
 
-export async function getInventoryForShip(shipId: string): Promise<InventoryItem[]> {
+export async function getInventoryForShip(shipId: string): Promise<IInventoryItem[]> {
     await new Promise(resolve => setTimeout(resolve, 500));
     const currentShip = await getShipById(shipId);
     if (!currentShip) {

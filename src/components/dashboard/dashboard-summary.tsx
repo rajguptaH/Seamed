@@ -1,8 +1,8 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Ship, Users, AlertTriangle } from "lucide-react";
-import Link from "next/link";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { AlertTriangle, Ship, Users } from "lucide-react";
+import Link from "next/link";
 
 interface DashboardSummaryProps {
     totalShips: number;
