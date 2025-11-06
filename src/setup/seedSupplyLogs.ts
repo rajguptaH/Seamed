@@ -35,7 +35,7 @@ async function seedSupplyLogs() {
     await client.connect();
     const db = client.db();
     await db.collection("supplyLogs").deleteMany({});
-    const result = await db.collection("supplyLogs").insertMany(supplyLogs);
+    const result = await db.collection("supplylogs").insertMany(supplyLogs);
     console.log(`✅ Inserted ${result.insertedCount} supply logs`);
   } catch (err) {
     console.error("❌ Seeding supply logs failed:", err);

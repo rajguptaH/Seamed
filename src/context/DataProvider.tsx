@@ -1,3 +1,4 @@
+"use client"; 
 import { entityService } from "@/services/entityService";
 import React, { createContext, useCallback, useContext, useState } from "react";
 

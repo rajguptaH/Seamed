@@ -5,7 +5,9 @@ export const API_ROUTES = {
   ships: "/api/ships",
   shipById: (id: string) => `/api/ships/${id}`,
   shipInventory: (id: string) => `/api/ships/${id}/inventory`,
-
+shipMedicalLogs: (id: string) => `/api/ships/${id}/medical-logs`,
+shipNonMedicalLogs: (id: string) => `/api/ships/${id}/non-medical-consumption-logs`,
+shipSupplyLogs : (id: string) => `/api/ships/${id}/supply-logs`,
   // 🔹 Company Endpoints
   companies: "/api/companies",
   companyById: (id: string) => `/api/companies/${id}`,
@@ -49,5 +51,7 @@ export const API_ENTITIES = {
   nonMedicalConsumptionLogs: "non-medical-consumption-logs",
   supplyLogs: "supply-logs",
   medicines: "medicines",
+  nonMedicalLogForShip : "non-medical-log-for-ship",
   flagRequirements: "flag-requirements",
+  supplyLogForShip: "supply-log-for-ship",
 };

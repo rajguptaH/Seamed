@@ -1,4 +1,4 @@
-import { getInventoryForShip } from "@/services/inventoryServices";
+import { getInventoryForShip } from "@/services/api/inventoryServices";
 import { NextResponse } from "next/server";
 
 export async function GET(
