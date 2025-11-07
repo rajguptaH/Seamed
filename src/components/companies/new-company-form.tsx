@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useActionState, useEffect, useRef } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -11,12 +11,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { useData } from "@/context/DataProvider";
 import { useToast } from "@/hooks/use-toast";
+import { createCompanyAction } from "@/lib/actions";
+import { API_ENTITIES, API_ROUTES } from "@/utils/routes";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useActionState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { createCompanyAction } from "@/lib/actions";
 import { Textarea } from "../ui/textarea";
 
 const CompanySchema = z.object({
@@ -39,6 +41,7 @@ export function NewCompanyForm({ onFormSubmit }: { onFormSubmit: () => void }) {
     message: "",
     errors: {},
   });
+  const {createEntity} = useData();
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -58,29 +61,40 @@ export function NewCompanyForm({ onFormSubmit }: { onFormSubmit: () => void }) {
       doctorPhone: "",
       doctorPhone2: "",
     },
-  });
+  });const onSubmit = async (values: z.infer<typeof CompanySchema>) => {
+  try {
+    const payload = {
+      name: values.name,
+      address: values.address,
+      phone: values.phone,
+      medicalLogFormNumber: values.medicalLogFormNumber,
+      pic: {
+        name: values.picName,
+        email: values.picEmail,
+        phone: values.picPhone,
+        phone2: values.picPhone2 || "",
+      },
+      doctor: {
+        name: values.doctorName,
+        email: values.doctorEmail,
+        phone: values.doctorPhone,
+        phone2: values.doctorPhone2 || "",
+      },
+    };
 
-  useEffect(() => {
-    if (state.message && !state.errors) {
-      toast({
-        title: "Success",
-        description: state.message,
-      });
-      onFormSubmit();
-      form.reset();
-    } else if (state.message && state.errors) {
-       toast({
-        title: "Error",
-        description: state.message,
-        variant: "destructive",
-      });
-    }
-  }, [state, onFormSubmit, toast, form]);
+    await createEntity(API_ENTITIES.companies, API_ROUTES.companies, payload);
 
+    toast({ title: "Success", description: "Company added successfully!" });
+    form.reset();
+    onFormSubmit();
+  } catch (error: any) {
+    toast({ title: "Error", description: error.message, variant: "destructive" });
+  }
+};
 
   return (
     <Form {...form}>
-      <form ref={formRef} action={dispatch} className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto pr-2">
+      <form ref={formRef}  onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto pr-2">
         <FormField
           control={form.control}
           name="name"

@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useRef } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -17,13 +17,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+import { useData } from "@/context/DataProvider";
 import { useToast } from "@/hooks/use-toast";
+import { createShipAction } from "@/lib/actions";
+import { Company, Flag, VesselCategory } from "@/types";
+import { API_ENTITIES, API_ROUTES } from "@/utils/routes";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useActionState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { createShipAction } from "@/lib/actions";
-import { Flag, Company, VesselCategory } from "@/types";
 
 const ShipSchema = z.object({
   name: z.string().min(3, "Ship name must be at least 3 characters long."),
@@ -46,6 +48,7 @@ export function NewShipForm({ companies, onFormSubmit }: { companies: Company[];
     message: "",
     errors: {},
   });
+    const { createEntity } = useData();
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -60,27 +63,19 @@ export function NewShipForm({ companies, onFormSubmit }: { companies: Company[];
     },
   });
 
-  useEffect(() => {
-    if (state.message && !state.errors) {
-      toast({
-        title: "Success",
-        description: state.message,
-      });
-      onFormSubmit();
+ const onSubmit = async (values: z.infer<typeof ShipSchema>) => {
+    try {
+      await createEntity(API_ENTITIES.ships, API_ROUTES.ships, values);
+      toast({ title: "Success", description: "Ship added successfully!" });
       form.reset();
-    } else if (state.message && state.errors) {
-       toast({
-        title: "Error",
-        description: state.message,
-        variant: "destructive",
-      });
+      onFormSubmit();
+    } catch (error: any) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
     }
-  }, [state, onFormSubmit, toast, form]);
-
-
+  };
   return (
     <Form {...form}>
-      <form ref={formRef} action={dispatch} className="grid gap-4 py-4">
+      <form ref={formRef} onSubmit={form.handleSubmit(onSubmit)}  className="grid gap-4 py-4">
         <FormField
           control={form.control}
           name="companyId"
