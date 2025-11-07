@@ -1,17 +1,17 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
-import type { Ship } from "@/types";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { pharmacistDetails } from "@/lib/certificate-data";
+import type { Ship } from "@/types";
+import { FileDown } from "lucide-react";
+import { useEffect, useState } from "react";
 import { DatePicker } from "../ui/date-picker";
 import { PrintableCertificate } from "./printable-certificate";
-import { pharmacistDetails } from "@/lib/certificate-data";
-import { FileDown } from "lucide-react";
 
 interface CertificateGeneratorProps {
   ships: Ship[];
@@ -27,11 +27,32 @@ export function CertificateGenerator({ ships }: CertificateGeneratorProps) {
     setInspectionDate(new Date());
   }, []);
 
-  const selectedShip = ships.find(s => s.id === selectedShipId);
+  const selectedShip = ships.find(s => s._id === selectedShipId);
 
-  const handlePrint = () => {
-    window.print();
-  };
+ const handlePrint = () => {
+  const printContents = document.getElementById('printable-certificate');
+  if (printContents) {
+    const newWindow = window.open('', '', 'width=900,height=650');
+    newWindow?.document.write(`
+      <html>
+        <head>
+          <title>Certificate</title>
+          <style>           
+            body { font-family: serif; }
+            .border { border: 1px solid #000; }
+          </style>
+        </head>
+        <body>
+          ${printContents.innerHTML}
+        </body>
+      </html>
+    `);
+    newWindow?.document.close();
+    newWindow?.focus();
+    newWindow?.print();
+    newWindow?.close();
+  }
+};
 
   return (
     <>
@@ -60,7 +81,7 @@ export function CertificateGenerator({ ships }: CertificateGeneratorProps) {
                 </SelectTrigger>
                 <SelectContent>
                   {ships.map(ship => (
-                    <SelectItem key={ship.id} value={ship.id}>
+                    <SelectItem key={ship._id} value={ship._id}>
                       {ship.name} (IMO: {ship.imo})
                     </SelectItem>
                   ))}
