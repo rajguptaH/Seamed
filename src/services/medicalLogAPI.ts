@@ -38,3 +38,8 @@ export async function getShipById(shipId: string) {
     const ship = await fetchEntity(API_ENTITIES.ships, API_ROUTES.shipById(shipId));
     return ship;
 }
+export async function getAllShips() {
+    const { fetchEntity } = useData();
+    const ships = await fetchEntity(API_ENTITIES.ships, API_ROUTES.ships);
+    return ships;
+}

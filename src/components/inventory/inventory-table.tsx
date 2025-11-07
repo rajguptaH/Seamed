@@ -2,19 +2,17 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import type { InventoryItem, Batch } from "@/types";
-import { differenceInDays, isBefore, format } from "date-fns";
-import { cn } from "@/lib/utils";
-import { EditBatchDialog } from "./edit-batch-dialog";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import type { InventoryItem } from "@/types";
+import { differenceInDays, format, isBefore } from "date-fns";
+import { AlertTriangle, ChevronDown } from "lucide-react";
+import { useEffect, useState } from "react";
 import { AddBatchDialog } from "./add-batch-dialog";
 import { DeleteBatchDialog } from "./delete-batch-dialog";
-import { ChevronDown, AlertTriangle, PlusCircle } from "lucide-react";
+import { EditBatchDialog } from "./edit-batch-dialog";
 
 function ExpiryBadge({ expiryDate }: { expiryDate: Date | null }) {
   const [expiryInfo, setExpiryInfo] = useState<{
@@ -81,7 +79,7 @@ export function InventoryTable({ inventory, shipId }: { inventory: InventoryItem
           </div>
           {inventory.length > 0 ? (
             inventory.map((item) => (
-              <AccordionItem value={item.id} key={item.id}>
+              <AccordionItem value={item._id} key={item._id}>
                 <AccordionTrigger className="px-4 py-3 hover:bg-muted/50 data-[state=open]:bg-muted/50 transition-colors">
                   <div className="flex w-full items-center">
                      <div className="w-2/5 text-left font-medium">{item.medicineName}</div>

@@ -23,9 +23,10 @@ export default function DashboardClient() {
     fetchEntity(API_ENTITIES.ships, API_ROUTES.ships);
     fetchEntity(API_ENTITIES.companies, API_ROUTES.companies);
   }, [fetchEntity]);
-console.log("Data fropm Context API " , data)
+// console.log("Data fropm Context API " , data)
   const allShips = useMemo(() => data.ships || [], [data.ships]);
   const companies = useMemo(() => data.companies || [], [data.companies]);
+// console.log("allShips type:", typeof allShips, Array.isArray(allShips), allShips);
 
   // ✅ Only check inventory once after ships are fetched
   useEffect(() => {
@@ -69,8 +70,12 @@ console.log("All Ships ", allShips)
     filter === "needs_attention"
       ? allShips.filter((ship) => shipsNeedingAttentionIds.has(ship.id))
       : allShips;
-console.log("Ship To Show" , shipsToShow)
-  const totalCrew = allShips.reduce((acc, ship) => acc + (ship.crewCount || 0), 0);
+// console.log("Ship To Show" , shipsToShow)
+const totalCrew = Array.from(allShips || []).reduce(
+  (acc, ship) => acc + (ship.crewCount || 0),
+  0
+);
+
   const shipsWithExpiringItems = shipsNeedingAttention.length;
   const shipsNeedingAttentionNames = shipsNeedingAttention.map((s) => s.name);
 

@@ -1,17 +1,26 @@
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+"use client"; 
 import { PharmacistDetailsForm } from "@/components/settings/pharmacist-details-form";
-import { pharmacistDetails } from "@/lib/certificate-data";
-
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useData } from "@/context/DataProvider";
+import { API_ENTITIES, API_ROUTES } from "@/utils/routes";
+import { useEffect, useMemo } from "react";
 export default function SettingsPage() {
-  return (
-    <div className="grid gap-6">
+   const { data,fetchEntity } = useData();
+  
+    useEffect(() => {
+      fetchEntity(API_ENTITIES.pharmacists, API_ROUTES.pharmacists);
+    }, [fetchEntity]); 
+  
+const details = useMemo(() => data.pharmacists?.[0] || null, [data.pharmacists]);
+console.log("Pharma Detaisl" ,details)
+    return (
+      <div className="grid gap-6">
       <Card>
         <CardHeader>
           <CardTitle>Application Settings</CardTitle>
           <CardDescription>
-            Manage application-wide static data.
-          </CardDescription>
+              Manage application-wide static data.
+            </CardDescription>
         </CardHeader>
       </Card>
 
@@ -23,7 +32,8 @@ export default function SettingsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <PharmacistDetailsForm details={pharmacistDetails} />
+        {details && <PharmacistDetailsForm details={details} />}
+
         </CardContent>
       </Card>
     </div>

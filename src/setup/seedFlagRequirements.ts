@@ -125,8 +125,8 @@ const allFlagRequirements = flags.flatMap(flag =>
 );
 
 // Clean previous data
-await db.collection("flagRequirements").deleteMany({});
-const result = await db.collection("flagRequirements").insertMany(allFlagRequirements);
+await db.collection("flagrequirements").deleteMany({});
+const result = await db.collection("flagrequirements").insertMany(allFlagRequirements);
 
 console.log(`✅ Inserted ${result.insertedCount} flag requirements across ${flags.length} flags`);
 

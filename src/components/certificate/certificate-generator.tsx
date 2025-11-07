@@ -29,29 +29,37 @@ export function CertificateGenerator({ ships }: CertificateGeneratorProps) {
 
   const selectedShip = ships.find(s => s._id === selectedShipId);
 
- const handlePrint = () => {
-  const printContents = document.getElementById('printable-certificate');
-  if (printContents) {
-    const newWindow = window.open('', '', 'width=900,height=650');
-    newWindow?.document.write(`
-      <html>
-        <head>
-          <title>Certificate</title>
-          <style>           
-            body { font-family: serif; }
-            .border { border: 1px solid #000; }
-          </style>
-        </head>
-        <body>
-          ${printContents.innerHTML}
-        </body>
-      </html>
-    `);
-    newWindow?.document.close();
-    newWindow?.focus();
-    newWindow?.print();
-    newWindow?.close();
-  }
+const handlePrint = () => {
+  const certificate = document.getElementById("printable-certificate");
+  if (!certificate) return;
+
+  const printWindow = window.open("", "_blank", "width=900,height=650");
+  if (!printWindow) return;
+
+  // Grab Tailwind base styles from the page
+  const tailwindStyles = Array.from(document.querySelectorAll('style')).map(s => s.innerHTML).join('\n');
+
+  printWindow.document.write(`
+    <html>
+      <head>
+        <title>Medical Chest Certificate</title>
+        <style>
+          ${tailwindStyles} /* Apply Tailwind styles */
+          body { background: white; color: black; font-family: serif; margin: 0; padding: 0; }
+          #printable-certificate { width: 100%; }
+          #printable-certificate .overflow-auto { overflow: visible !important; }
+        </style>
+      </head>
+      <body>
+        ${certificate.outerHTML}
+      </body>
+    </html>
+  `);
+
+  printWindow.document.close();
+  printWindow.focus();
+  printWindow.print();
+  printWindow.close();
 };
 
   return (

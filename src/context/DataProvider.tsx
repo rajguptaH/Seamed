@@ -24,6 +24,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const service = entityService(endpoint);
     try {
       const items = await service.getAll();
+      console.log("Fetched data from API for Entity", endpoint ,items)
       setData((prev) => ({ ...prev, [name]: items }));
       return items; // ✅ return fetched data
     } finally {

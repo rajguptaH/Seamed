@@ -14,7 +14,7 @@ export function ShipList({ ships }: { ships: Ship[] }) {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {ships.map((ship) => (
-        <ShipCard key={ship.id} ship={ship} />
+        <ShipCard key={ship._id} ship={ship} />
       ))}
     </div>
   );

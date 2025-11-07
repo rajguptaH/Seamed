@@ -41,6 +41,9 @@ shipSupplyLogs : (id: string) => `/api/ships/${id}/supply-logs`,
     login: "/api/auth/login",
     me: "/api/auth/me",
   },
+  // pharmacists
+  pharmacists : "/api/pharmacists",
+  pharmacistsById : "/api/pharmacists"
 };
 export const API_ENTITIES = {
   ships: "ships",
@@ -54,4 +57,7 @@ export const API_ENTITIES = {
   nonMedicalLogForShip : "non-medical-log-for-ship",
   flagRequirements: "flag-requirements",
   supplyLogForShip: "supply-log-for-ship",
+  pharmacists: "pharmacists",
+
+
 };
