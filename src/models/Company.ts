@@ -26,7 +26,7 @@ const doctorSchema = new Schema(
 
 const companySchema = new Schema<ICompanyDoc>(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true , unique: true },
     address: String,
     phone: String,
     pic: { type: personInChargeSchema, required: true },

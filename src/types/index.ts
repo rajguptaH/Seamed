@@ -2,6 +2,20 @@
 
 import { Types } from "mongoose";
 
+export enum UserRole {
+  SuperAdmin = "SuperAdmin",
+  Company = "Company",
+  Ship = "Ship",
+  User = "User",
+}
+
+export interface IUser {
+  _id?: string;
+  name: string;
+  email: string;
+  password: string;
+  role: UserRole;
+}
 export interface IPersonInCharge {
 
   name: string;

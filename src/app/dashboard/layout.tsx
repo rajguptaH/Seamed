@@ -1,9 +1,9 @@
 
+import { NewCompanyDialog } from "@/components/companies/new-company-dialog";
 import { Header } from "@/components/layout/header";
 import { NewShipDialog } from "@/components/ships/new-ship-dialog";
-import { getCompanies } from "@/lib/data";
-import { NewCompanyDialog } from "@/components/companies/new-company-dialog";
 import { Button } from "@/components/ui/button";
+import { getCompanies } from "@/lib/data";
 import { Bot, FileText, Settings } from "lucide-react";
 import Link from "next/link";
 
@@ -42,7 +42,7 @@ export default async function DashboardLayout({
             </Link>
           </Button>
           <NewCompanyDialog />
-          <NewShipDialog companies={companies} />
+          <NewShipDialog />
         </div>
       </Header>
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 print:hidden">

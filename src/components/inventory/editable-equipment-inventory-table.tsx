@@ -1,16 +1,16 @@
 
 "use client";
 
-import React, { useActionState, useState, useEffect } from "react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
-import type { Flag, FlagRequirement, Medicine } from "@/types";
 import { updateFlagRequirementAction } from "@/lib/actions";
+import type { Flag, FlagRequirement, Medicine } from "@/types";
 import { Save } from "lucide-react";
-import { EditMedicineDialog } from "./edit-medicine-dialog";
+import React, { useActionState, useEffect, useState } from "react";
 import { DeleteMedicineDialog } from "./delete-medicine-dialog";
+import { EditMedicineDialog } from "./edit-medicine-dialog";
 import { NewMedicineDialog } from "./new-medicine-dialog";
 
 interface EditableEquipmentInventoryTableProps {
@@ -122,8 +122,8 @@ export function EditableEquipmentInventoryTable({ requirements, items, flag }: E
                       </TableCell>
                   </TableRow>
                   {groupedItems[category].sort((a,b) => a.name.localeCompare(b.name)).map((item) => {
-                      const req = requirements.find(r => r.medicineId === item.id);
-                      const currentChanges = pendingChanges[item.id];
+                      const req = requirements.find(r => r.medicineId === item._id);
+                      const currentChanges = pendingChanges[item._id];
                       
                       const getDisplayValue = () => {
                           const changedValue = currentChanges?.quantity;
@@ -134,17 +134,17 @@ export function EditableEquipmentInventoryTable({ requirements, items, flag }: E
                       };
                       
                       return (
-                          <TableRow key={item.id}>
+                          <TableRow key={item._id}>
                           <TableCell className="font-medium">{item.name}</TableCell>
                           <TableCell>{item.form}</TableCell>
                           <TableCell>{item.strength ?? 'N/A'}</TableCell>
                           <TableCell>{item.indication}</TableCell>
 
-                          <TableCell onClick={() => handleCellClick(item.id)}>
-                              {editingCell === item.id ? (
+                          <TableCell onClick={() => handleCellClick(item._id)}>
+                              {editingCell === item._id ? (
                               <Input
                                   defaultValue={getDisplayValue()}
-                                  onChange={(e) => handleInputChange(item.id, e.target.value)}
+                                  onChange={(e) => handleInputChange(item._id, e.target.value)}
                                   onBlur={handleInputBlur}
                                   autoFocus
                                   className="w-24"
@@ -161,7 +161,7 @@ export function EditableEquipmentInventoryTable({ requirements, items, flag }: E
                                   {currentChanges && (
                                     <form action={formAction}>
                                       <input type="hidden" name="flag" value={flag} />
-                                      <input type="hidden" name="medicineId" value={item.id} />
+                                      <input type="hidden" name="medicineId" value={item._id} />
                                       <input type="hidden" name="quantity" value={currentChanges.quantity ?? req?.quantity ?? '0'} />
                                       <input type="hidden" name="isMedicine" value="false" />
                                       <Button type="submit" variant="ghost" size="icon" disabled={isPending}>

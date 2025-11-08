@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,13 +9,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { NewShipForm } from "./new-ship-form";
+import { useData } from "@/context/DataProvider";
+import { API_ENTITIES } from "@/utils/routes";
 import { PlusCircle } from "lucide-react";
-import type { Company } from "@/types";
+import { useMemo, useState } from "react";
+import { NewShipForm } from "./new-ship-form";
 
-export function NewShipDialog({ companies }: { companies: Company[] }) {
+
+export function NewShipDialog() {
   const [open, setOpen] = useState(false);
-
+  const { data } = useData();
+  const company = useMemo(() => data[API_ENTITIES.companies] || [], [data]);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -34,7 +37,7 @@ export function NewShipDialog({ companies }: { companies: Company[] }) {
             Enter the details of the new vessel to add it to your fleet.
           </DialogDescription>
         </DialogHeader>
-        <NewShipForm companies={companies} onFormSubmit={() => setOpen(false)} />
+        <NewShipForm companies={company} onFormSubmit={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   );

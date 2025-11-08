@@ -1,15 +1,15 @@
 "use client";
 
-import { useActionState, useState, useEffect } from "react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
-import type { Flag, FlagRequirement, Medicine } from "@/types";
 import { updateFlagRequirementAction } from "@/lib/actions";
+import type { Flag, FlagRequirement, Medicine } from "@/types";
 import { Save } from "lucide-react";
-import { EditMedicineDialog } from "./edit-medicine-dialog";
+import { useActionState, useEffect, useState } from "react";
 import { DeleteMedicineDialog } from "./delete-medicine-dialog";
+import { EditMedicineDialog } from "./edit-medicine-dialog";
 import { NewMedicineDialog } from "./new-medicine-dialog";
 
 interface EditableFlagInventoryTableProps {
@@ -28,7 +28,7 @@ export function EditableFlagInventoryTable({ requirements, items, flag }: Editab
   const [state, formAction, isPending] = useActionState(updateFlagRequirementAction, { message: "", errors: {}});
 
   const sortedItems = [...items].sort((a, b) => a.name.localeCompare(b.name));
-
+console.log("Flags" ,flag)
   useEffect(() => {
     if (state?.message && !isPending) {
         if (state.errors && Object.keys(state.errors).length > 0) {
@@ -94,8 +94,8 @@ export function EditableFlagInventoryTable({ requirements, items, flag }: Editab
       </TableHeader>
       <TableBody>
         {sortedItems.map((item) => {
-          const req = requirements.find(r => r.medicineId === item.id);
-          const currentChanges = pendingChanges[item.id];
+          const req = requirements.find(r => r.medicineId === item._id);
+          const currentChanges = pendingChanges[item._id];
           
           const getDisplayValue = (field: EditableField) => {
             const changedValue = currentChanges?.[field];
@@ -107,18 +107,18 @@ export function EditableFlagInventoryTable({ requirements, items, flag }: Editab
           
 
           return (
-            <TableRow key={item.id}>
+            <TableRow key={item._id}>
               <TableCell className="font-medium">{item.name}</TableCell>
               <TableCell>{item.form}</TableCell>
               <TableCell>{item.strength ?? 'N/A'}</TableCell>
               <TableCell>{item.indication}</TableCell>
 
               {(['categoryA', 'categoryB', 'categoryC'] as EditableField[]).map(field => (
-                 <TableCell key={field} onClick={() => handleCellClick(item.id, field)}>
-                    {editingCell === `${item.id}-${field}` ? (
+                 <TableCell key={field} onClick={() => handleCellClick(item._id, field)}>
+                    {editingCell === `${item._id}-${field}` ? (
                     <Input
                         defaultValue={getDisplayValue(field)}
-                        onChange={(e) => handleInputChange(item.id, field, e.target.value)}
+                        onChange={(e) => handleInputChange(item._id, field, e.target.value)}
                         onBlur={handleInputBlur}
                         autoFocus
                         className="w-24"
@@ -136,7 +136,7 @@ export function EditableFlagInventoryTable({ requirements, items, flag }: Editab
                     {currentChanges && (
                       <form action={formAction}>
                           <input type="hidden" name="flag" value={flag} />
-                          <input type="hidden" name="medicineId" value={item.id} />
+                          <input type="hidden" name="medicineId" value={item._id} />
                           <input type="hidden" name="categoryA" value={currentChanges.categoryA ?? req?.categoryA ?? '-'} />
                           <input type="hidden" name="categoryB" value={currentChanges.categoryB ?? req?.categoryB ?? '-'} />
                           <input type="hidden" name="categoryC" value={currentChanges.categoryC ?? req?.categoryC ?? '-'} />

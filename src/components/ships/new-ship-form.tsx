@@ -19,11 +19,10 @@ import {
 } from "@/components/ui/select";
 import { useData } from "@/context/DataProvider";
 import { useToast } from "@/hooks/use-toast";
-import { createShipAction } from "@/lib/actions";
 import { Company, Flag, VesselCategory } from "@/types";
 import { API_ENTITIES, API_ROUTES } from "@/utils/routes";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useActionState, useRef } from "react";
+import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -44,10 +43,7 @@ const flags: Flag[] = ["Panama", "Liberia", "Marshall Islands", "Hong Kong", "Si
 const categories: VesselCategory[] = ['A', 'B', 'C'];
 
 export function NewShipForm({ companies, onFormSubmit }: { companies: Company[]; onFormSubmit: () => void }) {
-  const [state, dispatch] = useActionState(createShipAction, {
-    message: "",
-    errors: {},
-  });
+
     const { createEntity } = useData();
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
@@ -90,7 +86,7 @@ export function NewShipForm({ companies, onFormSubmit }: { companies: Company[];
                 </FormControl>
                 <SelectContent>
                   {companies.map((company) => (
-                    <SelectItem key={company.id} value={company.id}>
+                    <SelectItem key={company._id} value={company._id}>
                       {company.name}
                     </SelectItem>
                   ))}

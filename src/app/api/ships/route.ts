@@ -26,6 +26,10 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: `${field} is required` }, { status: 400 });
       }
     }
+   const existingShip = await Ship.findOne({ imo: body.imo });
+    if (existingShip) {
+      return NextResponse.json({ error: "IMO already exists" }, { status: 409 });
+    }
 
     const newShip = await Ship.create(body);
     return NextResponse.json(newShip, { status: 201 });

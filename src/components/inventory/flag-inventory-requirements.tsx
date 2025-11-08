@@ -10,21 +10,32 @@ import { EditableFlagInventoryTable } from "./editable-flag-inventory-table";
 
 export function FlagInventoryRequirements() {
   const { data, fetchEntity } = useData();
-  console.log("Data in flag inventory" ,data)
+  console.log("Data in flag inventory", data)
   useEffect(() => {
     fetchEntity(API_ENTITIES.flagRequirements, API_ROUTES.flagRequirements);
     fetchEntity(API_ENTITIES.medicines, API_ROUTES.medicines);
-    
-  }, [fetchEntity]);
-const flagRequirements = useMemo(() => data["flag-requirements"] || [], [data["flag-requirements"]]);
-console.log("Flags requirement", flagRequirements);
 
-  console.log("Flags requirement" ,flagRequirements)
+  }, [fetchEntity]);
+  const rawFlagRequirements = useMemo(() => data.flagRequirements || [], [data.flagRequirements]);
+
+  // Group by flag name
+  const flagRequirements = useMemo(() => {
+    const grouped: Record<string, any[]> = {};
+    rawFlagRequirements.forEach((req) => {
+      const flag = req.flag || "Unknown";
+      if (!grouped[flag]) grouped[flag] = [];
+      grouped[flag].push(req);
+    });
+    return grouped;
+  }, [rawFlagRequirements]);
+
+
+
   const allItems = useMemo(() => data.medicines || [], [data.medicines]);
   const flags = Object.keys(flagRequirements) as IFlag[];
   const medicines = allItems.filter(item => item.type === 'Medicine');
   const equipments = allItems.filter(item => item.type === 'Equipment');
-console.log("Flags " ,flags)
+  console.log("Flags ", flags)
   return (
     <Card className="col-span-1 lg:col-span-2">
       <CardHeader className="flex flex-row items-center justify-between">
